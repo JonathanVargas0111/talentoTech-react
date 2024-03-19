@@ -3,7 +3,7 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
 export const apiSlice = createApi({
     reducerPath: "api",
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://localhost:3003',
+        baseUrl: 'http://localhost:3000',
     }), // Hace las veces de Axios
     endpoints: (builder) => ({
         getUsers: builder.query({
