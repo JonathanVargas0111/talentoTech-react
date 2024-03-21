@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import { useCreateUserMutation, useGetUserByIdQuery } from '../../features/api/apiSlice';
+import { useCreateUserMutation, useGetUserByIdQuery, useUpdateUserMutation } from '../../features/api/apiSlice';
 import Swal from 'sweetalert2'
 import UserForm from './UserForm';
 
@@ -7,20 +7,20 @@ export default function UserFormEdit(){
 
     const navigate = useNavigate(); // Instanciamos la vaiable de useNavigate
     const params = useParams(); // Instanciamos la variable para obtener los parametros por URL
-    const [createUser] = useCreateUserMutation() //TODO: replace to Update
+    const [updateUser] = useUpdateUserMutation() //TODO: replace to Update
 
     //TODO: Replace to Update Logic
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const newUser = {
+        const user = {
+            _id : params.id,
             name: e.target.name.value,
             lastname: e.target.lastname.value,
             email: e.target.email.value,
             id: e.target.id.value,
-            password: e.target.password.value,
         }
         try {
-            const response = await createUser(newUser)
+            const response = await updateUser(user)
             if(response.data.status == "error"){
                 Swal.fire({
                     position: "top-end",
@@ -33,15 +33,15 @@ export default function UserFormEdit(){
                 Swal.fire({
                     position: "top-end",
                     icon: "success",
-                    title: "Usuario Creado Correctamente",
+                    title: "Usuario actualizado Correctamente",
                     showConfirmButton: false,
                     timer: 1500
                 }).then(() => {
                     navigate('/user') // Hacemos la redireccion
                 });
-            }
+            }   
         } catch (error) {
-            console.log(error)
+            console.log(error.message)
         }
         
     }

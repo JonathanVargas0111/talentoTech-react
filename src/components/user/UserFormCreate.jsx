@@ -8,8 +8,13 @@ export default function UserFormCreate(){
     const navigate = useNavigate(); // Instanciamos la vaiable de useNavigate
     const [createUser] = useCreateUserMutation()
 
+    const onFileChange = (e) => {
+        console.log(e.target.files);
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        e.target.file
         const newUser = {
             name: e.target.name.value,
             lastname: e.target.lastname.value,
@@ -45,6 +50,6 @@ export default function UserFormCreate(){
     }
 
     return (
-        <UserForm props={{handleSubmit: handleSubmit, user:null}} />
+        <UserForm props={{handleSubmit: handleSubmit,onFileChange: onFileChange, user:null}} />
     );
 }
