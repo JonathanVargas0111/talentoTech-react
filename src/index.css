@@ -74,3 +74,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+.hero{
+  background-image: linear-gradient(to top, rgba(0, 0, 0, 0.4) ,rgba(0, 0, 0, 0.4)),url("../public/home.jpeg");
+  background-position: 30%;
+  background-size: cover;
+}

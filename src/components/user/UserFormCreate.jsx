@@ -3,6 +3,8 @@ import { useCreateUserMutation, useUploadAvatarMutation } from '../../features/a
 import Swal from 'sweetalert2'
 import UserForm from './UserForm';
 import { useState } from 'react';
+import { HeroData } from '../../constants/index'
+
 
 export default function UserFormCreate() {
 
@@ -33,7 +35,7 @@ export default function UserFormCreate() {
                     position: "top-end",
                     icon: "error",
                     title: "El usuario no pudo ser registrado, por favor verifique los datos",
-                    showConfirmButton: false    ,
+                    showConfirmButton: false,
                     timer: 1500
                 })
             } else {
@@ -60,6 +62,20 @@ export default function UserFormCreate() {
     }
 
     return (
-        <UserForm props={{ handleSubmit: handleSubmit, handleChangeAvatar: handleChangeAvatar, user: null }} />
+        <div className='hero flex min-h-screen items-center justify-center pt-20'>
+            <div className='flex max-w-4xl flex-col items-center justify-center gap-6 pb-10'>
+                <div className='space-y-4'>
+                    <h1 className='m-4 text-center text-4xl text-white md:text-2xl lg:text-4xl'>
+                        {
+                            HeroData.title
+                        }
+                    </h1>
+                    <p className='p-4 text-center text-slate-300 hidden md:flex'>
+                        {HeroData.description}
+                    </p>
+                </div>
+                <UserForm props={{ handleSubmit: handleSubmit, handleChangeAvatar: handleChangeAvatar, user: null }} />
+            </div>
+        </div>
     );
 }

@@ -74,6 +74,26 @@ export default function UserFormEdit(){
         
         
     return (
-        <UserForm props={{handleSubmit:handleSubmit,handleChangeAvatar: handleChangeAvatar, user:user}} />
+
+
+
+        <div className='hero flex min-h-screen items-center justify-center pt-20'>
+            <div className='flex max-w-4xl flex-col items-center justify-center gap-6 pb-10'>
+                <div className='space-y-4'>
+                    <h1 className='m-4 text-center text-4xl text-white md:text-2xl lg:text-4xl'>
+                    Actualiza tus Datos Personales
+                    </h1>
+                   
+                </div>
+                <UserForm props={{handleSubmit:handleSubmit,handleChangeAvatar: handleChangeAvatar, user:user}} />
+
+            </div>
+        </div>
+
+
+
+
+
+
     );
 }
