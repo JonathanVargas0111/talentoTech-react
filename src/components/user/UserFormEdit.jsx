@@ -1,15 +1,22 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import { useCreateUserMutation, useGetUserByIdQuery, useUpdateUserMutation } from '../../features/api/apiSlice';
+import { useGetUserByIdQuery, useUpdateUserMutation, useUploadAvatarMutation } from '../../features/api/apiSlice';
 import Swal from 'sweetalert2'
 import UserForm from './UserForm';
+import { useState } from 'react';
 
 export default function UserFormEdit(){
 
     const navigate = useNavigate(); // Instanciamos la vaiable de useNavigate
     const params = useParams(); // Instanciamos la variable para obtener los parametros por URL
     const [updateUser] = useUpdateUserMutation() //TODO: replace to Update
+    const [file, setFile] = useState(null)
+    const [uploadAvatar] = useUploadAvatarMutation()
 
-    //TODO: Replace to Update Logic
+
+    const handleChangeAvatar = (e) => {
+        setFile(e.target.files)
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const user = {
@@ -21,6 +28,12 @@ export default function UserFormEdit(){
         }
         try {
             const response = await updateUser(user)
+            if (file) {
+                const formData = new FormData()
+                formData.append('file', file[0])
+                console.log(formData);
+                uploadAvatar({ _id: response.data._id, file: formData })
+            }            
             if(response.data.status == "error"){
                 Swal.fire({
                     position: "top-end",
@@ -29,7 +42,9 @@ export default function UserFormEdit(){
                     showConfirmButton: false,
                     timer: 1500
                   })
-            }else{            
+            }else{
+                
+                
                 Swal.fire({
                     position: "top-end",
                     icon: "success",
@@ -59,6 +74,6 @@ export default function UserFormEdit(){
         
         
     return (
-        <UserForm props={{handleSubmit:handleSubmit, user:user}} />
+        <UserForm props={{handleSubmit:handleSubmit,handleChangeAvatar: handleChangeAvatar, user:user}} />
     );
 }

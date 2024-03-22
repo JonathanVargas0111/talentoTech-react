@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-const tok = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWZiODg5MjJiYjhkYzcxZWYwNDgzYTciLCJlbWFpbCI6ImZlbGlwZTAxMTFAaG90bWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MTA5ODMzMTgsImV4cCI6MTcxMDk4NjkxOH0.eN2nrcz8SsLaNOxXfC0ByxjEaVTaQZ00N-nEHivU8uM"
-
+const tok = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWZjZDM4ZWNjYWEzOTBhY2Q5OGM5MGEiLCJlbWFpbCI6ImZlbGlwZTAxMTFAaG90bWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MTEwNjgwNTIsImV4cCI6MTcxMTA3MTY1Mn0.Hhel2Oid_-gYc0G1aNy8wI9J0dJQQOBdjTOtPAnNhrE"
 export const apiSlice = createApi({
     reducerPath: "api",
     baseQuery: fetchBaseQuery({
@@ -48,10 +47,18 @@ export const apiSlice = createApi({
                 method: 'DELETE',
             }),
             invalidatesTags: ["Users"]
+        }),
+        uploadAvatar:builder.mutation({
+            query: (body) => ({
+                url: `/upload/${body._id}/user`,
+                method: 'POST',
+                body: body.file
+            }),
+            invalidatesTags: ["Users"]
         })
     })
 })
 
 /** Segun la nomenclatura de la libreria se usa use al principio 
  * y Query o Mutation al final segun corresponda */
-export const { useGetUsersQuery, useGetUserByIdQuery, useCreateUserMutation, useUpdateUserMutation, useDeleteUserMutation } = apiSlice
+export const { useGetUsersQuery, useGetUserByIdQuery, useCreateUserMutation, useUpdateUserMutation, useDeleteUserMutation, useUploadAvatarMutation } = apiSlice

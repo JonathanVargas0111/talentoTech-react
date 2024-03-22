@@ -16,16 +16,16 @@ export default function UserList() {
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, delete it!"
-          }).then((result) => {
+        }).then((result) => {
             if (result.isConfirmed) {
                 deleteUser(user._id);
-              Swal.fire({
-                title: "Deleted!",
-                text: "Your file has been deleted.",
-                icon: "success"
-              });
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "Your file has been deleted.",
+                    icon: "success"
+                });
             }
-          });
+        });
     }
 
 
@@ -60,17 +60,19 @@ export default function UserList() {
                             <td className="border-y-2 px-4 py-2 border-indigo-600">{user.id}</td>
                             <td className="border-y-2 px-4 py-2 border-indigo-600">
                                 <img className="size-40 transition-transform duration-1000 transform hover:scale-110 max-w-none"
-                                    src={user.avatar} /></td>
+                                    src={`http://localhost:3000/${user.avatar}`} /></td>
                             <td className="border-y-2 px-4 py-2 border-indigo-600">
                                 <div className="inline-flex rounded-md shadow-sm" role="group">
                                     <Link to={`/user/${user._id}`}
-                                        className="px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border
-                                             border-gray-900 rounded-s-lg hover:bg-gray-900 hover:text-white 
+                                        className="px-4 py-2 text-sm font-medium text-orange-600 bg-transparent border
+                                             border-orange-600 rounded-s-lg hover:bg-gray-900 hover:text-white 
                                              focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white
-                                             dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700">Edit</Link>
+                                             dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700">
+                                        Edit
+                                    </Link>
                                     <button type="button"
-                                        onClick={()=>handleDeleteUser(user)}
-                                    className="px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border-t border-b border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700">
+                                        onClick={() => handleDeleteUser(user)}
+                                        className="px-4 py-2 text-sm font-medium text-red-700 bg-transparent border-t border-b border-red-700 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700">
                                         Delete
                                     </button>
                                 </div>
