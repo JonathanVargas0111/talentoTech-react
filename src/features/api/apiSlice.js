@@ -1,15 +1,17 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
 
-const tok = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWZjZDM4ZWNjYWEzOTBhY2Q5OGM5MGEiLCJlbWFpbCI6ImZlbGlwZTAxMTFAaG90bWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MTEwNjgwNTIsImV4cCI6MTcxMTA3MTY1Mn0.Hhel2Oid_-gYc0G1aNy8wI9J0dJQQOBdjTOtPAnNhrE"
 export const apiSlice = createApi({
     reducerPath: "api",
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://localhost:3000',
-        prepareHeaders: (headers, { }) => {
-            const token = tok;
-            if (token) {
-                headers.set('authorization', `Bearer ${token}`) // Se agrega el token a la cabecera
-            }
+        prepareHeaders: (headers, {getState}) => {
+            console.log(getState())
+            console.log(getState().auth.token)
+            // const localData = JSON.parse(localStorage.getItem('sessionData'))
+            // const token = localData.token
+            // if(token){
+            //     headers.set('Authorization', `Bearer ${token}`);
+            // }
             return headers;
         }
     }), // Hace las veces de Axios
@@ -17,9 +19,9 @@ export const apiSlice = createApi({
         getUsers: builder.query({
             query: () => '/user',
             providesTags: ['Users'], // Me permite ejecutar un llamado
-            transformResponse: response => response.sort((a, b) =>
-                (a.name[0].toUpperCase() < b.name[0].toUpperCase()) ? -1
-                    : (a.name[0].toUpperCase() > b.name[0].toUpperCase()) ? 1 : 0)
+            transformResponse: response => response.sort((a, b) => 
+             (a.name[0].toUpperCase() < b.name[0].toUpperCase()) ? -1 
+            : (a.name[0].toUpperCase() > b.name[0].toUpperCase())  ? 1 : 0)
         }),
         getUserById: builder.query({
             query: (_id) => '/user/' + _id,
@@ -35,7 +37,7 @@ export const apiSlice = createApi({
         }),
         updateUser: builder.mutation({
             query: (user) => ({
-                url: '/user/' + user._id,
+                url: `/user/${user._id}`,
                 method: 'PATCH',
                 body: user
             }),
@@ -43,29 +45,36 @@ export const apiSlice = createApi({
         }),
         deleteUser: builder.mutation({
             query: (_id) => ({
-                url: '/user/' + _id,
-                method: 'DELETE',
+                url: `/user/${_id}`,
+                method: "DELETE",
             }),
             invalidatesTags: ["Users"]
         }),
-        uploadAvatar:builder.mutation({
+        uploadAvatar: builder.mutation({
             query: (body) => ({
                 url: `/upload/${body._id}/user`,
-                method: 'POST',
+                method: "POST",
                 body: body.file
             }),
             invalidatesTags: ["Users"]
         }),
-        login :builder.mutation({
+        login: builder.mutation({
             query: (body) => ({
-                url:'login',
-                method:'POST',
-                body:body
+                url: 'login',
+                method: 'POST',
+                body: body
             })
-        })
-    })
+        })        
+    })    
 })
 
 /** Segun la nomenclatura de la libreria se usa use al principio 
  * y Query o Mutation al final segun corresponda */
-export const { useGetUsersQuery, useGetUserByIdQuery, useCreateUserMutation, useUpdateUserMutation, useDeleteUserMutation, useUploadAvatarMutation, useLoginMutation } = apiSlice
+export const { useGetUsersQuery, 
+                useGetUserByIdQuery, 
+                useCreateUserMutation, 
+                useUpdateUserMutation,
+                useDeleteUserMutation,
+                useUploadAvatarMutation,
+                useLoginMutation
+        } = apiSlice
