@@ -17,9 +17,9 @@ export default function Footer() {
         <div>
             <footer className="bg-black pb-5">
                 <div className="max-w-screen-xl px-4 pt-8 mx-auto sm:px-6 lg:px-8">
-                    <div className="sm:flex sm:items-center sm:justify-between">
+                    <div className="flex flex-col md:flex-row sm:items-center sm:justify-between">
                         <div className="flex justify-center text-gray-300 sm:justify-start">
-                            <ul className="flex items-center gap-4">
+                            <ul className="flex flex-col md:flex-row items-center gap-4">
                                 {
                                     !isAutheticated ? null : (
                                         NAV_LINKS_PRIVATE.map((item, index) => (

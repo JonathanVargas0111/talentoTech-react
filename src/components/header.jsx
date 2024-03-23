@@ -49,7 +49,7 @@ export default function Header() {
                     </div>
                     <div className="hidden lg:flex">
                         <ul className="flex items-center gap-4">
-                        {
+                            {
                                 !isAutheticated ? null : (
                                     NAV_LINKS_PRIVATE.map((item, index) => (
                                         <li key={index}>
@@ -74,7 +74,7 @@ export default function Header() {
                                         </Link>
                                     </li>
                                 ))
-                            }                            
+                            }
                         </ul>
                     </div>
                     <div className="hidden text-sm text-white lg:flex">
@@ -102,10 +102,24 @@ export default function Header() {
                         <div className="rounded-md bg-black py-3 lg:hidden">
                             <ul className="flex flex-col items-center">
                                 {
+                                    !isAutheticated ? null : (
+                                        NAV_LINKS_PRIVATE.map((item, index) => (
+                                            <li key={index} className="py-6">
+                                                <Link
+                                                    className="text-sm text-white hover:text-neutral-500"
+                                                    to={item.path}
+                                                >
+                                                    {item.title}
+                                                </Link>
+                                            </li>
+                                        ))
+                                    )
+                                }
+                                {
                                     NAV_LINKS.map((item, index) => (
                                         <li key={index} className="py-6">
                                             <Link
-                                                className="text-sm text-white "
+                                                className="text-sm text-white hover:text-neutral-500"
                                                 to={item.path}
                                             >
                                                 {item.title}
