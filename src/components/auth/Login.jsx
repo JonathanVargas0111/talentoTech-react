@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { useLoginMutation } from "../../features/api/apiSlice";
 import Swal from 'sweetalert2'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { loginSuccess } from "../../features/authSlice";
 
-export default function Login(){
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+export default function Login() {
 
     const [login] = useLoginMutation();
     const [error, setError] = useState(false);
@@ -13,7 +17,7 @@ export default function Login(){
     const dispatch = useDispatch();
 
     const handleSubmit = async (e) => {
-        e.preventDefault();        
+        e.preventDefault();
         try {
             setError(false)
             const user = {
@@ -21,9 +25,9 @@ export default function Login(){
                 password: e.target.password.value,
             }
             const response = await login(user)
-            if(response.error && response.error.data.status == "error"){
+            if (response.error && response.error.data.status == "error") {
                 setError(true)
-            }else{
+            } else {
                 localStorage.setItem('sessionData', JSON.stringify(response.data))
                 dispatch(loginSuccess(response.data))
                 Swal.fire({
@@ -42,40 +46,48 @@ export default function Login(){
     }
 
     return (
-        <div className="max-w-lg w-full mx-auto px-5 py-5">
-            {!error ? null : 
-                (<div className="flex justify-center bg-slate-100 text-red-500 font-bold">
-                    Datos Invalidos
-            </div>
-            )}
-            <form onSubmit={handleSubmit} className=" shadow-md rounded pt-6 pb-10 mb-4 px-10">
-                <div className="mb-4">
-                    <label className="block text-gray-700 font-bold mb-2" htmlFor="email">Email</label>
-                    <input type="email" 
-                            required 
-                            name="email" 
-                            placeholder="Email" 
-                            className="shadow appearance-none border rounded w-full focus:shadow-outline disabled:bg-slate-50 disabled:text-slate-500 
-                                    disabled:border-slate-200 disabled:shadow-none
-                                    invalid:border-pink-500 invalid:text-pink-600
-                                    focus:invalid:border-pink-500 focus:invalid:ring-pink-500" />
+        <div className="bg-gradient-to-r from-slate-900 to-slate-900 w-full mx-auto px-5 py-5 min-h-screen flex justify-center items-center">
+            <div className="w-full max-w-lg  rounded-lg bg-black p-8">
+                <div className="flex flex-shrink-0 items-center justify-center p-8">
+                    <img
+                        className="mr-2 h-20 w-20"
+                        src="/logo/color1.png"
+                        alt="Logo"
+                    />
+                    <span className="text-white text-lg tracking-tight hover:text-neutral-500">UrbanAbode</span>
                 </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700 font-bold mb-2" htmlFor="password">Password</label>
-                    <input type="password" 
-                            required 
+                {!error ? null :
+                    (<div className="flex justify-center bg-slate-100 text-red-500 font-bold">
+                        Datos Invalidos
+                    </div>
+                    )}
+                <form onSubmit={handleSubmit} className=" shadow-md rounded pt-6 pb-10 mb-4 px-10">
+                    <div className="mb-4">
+                        <Label className="block text-gray-300 font-bold mb-2" htmlFor="email" >Email</Label>
+                        <Input
+                            type="email"
+                            required
+                            name="email"
+                            placeholder="Email"
+                            id="email"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <Label className="block text-gray-300 font-bold mb-2" htmlFor="password" >Password</Label>
+                        <Input
+                            type="password"
+                            required
+                            name="password"
+                            placeholder="password"
+                            id="password"
                             minLength="3"
-                            name="password" 
-                            placeholder="Password" 
-                            className="shadow appearance-none border rounded w-full focus:shadow-outline 
-                                    disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
-                                    invalid:border-pink-500 invalid:text-pink-600
-                                    focus:invalid:border-pink-500 focus:invalid:ring-pink-500" />
-                </div>
-                <div className="flex justify-center">
-                    <button type="submit" className="bg-blue-500 hover:bg-blue-700 rounded text-blue-50 font-bold py-2 px-4">Iniciar Sesion</button>
-                </div>
-            </form>
+                        />
+                    </div>
+                    <div className="flex justify-center">
+                        <Button type="submit" variant="secondary" className="mt-4 w-full max-w-24">Login In</Button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 }
