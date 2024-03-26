@@ -2,6 +2,34 @@ import { Link } from 'react-router-dom';
 import { useDeleteUserMutation, useGetUsersQuery } from '../../features/api/apiSlice';
 import Swal from 'sweetalert2';
 
+import {
+    Menubar,
+    MenubarContent,
+    MenubarItem,
+    MenubarMenu,
+    MenubarSeparator,
+    MenubarShortcut,
+    MenubarTrigger,
+} from "@/components/ui/menubar"
+
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table"
+
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+} from "@/components/ui/avatar"
+
+
+
 export default function UserList() {
 
     /** Obtiene el estado de una variable con Redux */
@@ -39,48 +67,70 @@ export default function UserList() {
     else if (isError) return (<div>Error: {error.message} </div>)
 
     return (
-        <div className="flex justify-center py-8 px-10">
-            <table className="table-auto w-full">
-                <thead>
-                    <tr className="bg-slate-500">
-                        <th className="px-4 py-2 text-white">Name</th>
-                        <th className="px-4 py-2 text-white">LastName</th>
-                        <th className="px-4 py-2 text-white">Email</th>
-                        <th className="px-4 py-2 text-white">Idetification</th>
-                        <th className="px-4 py-2 text-white">Avatar</th>
-                        <th className="px-4 py-2 text-white">Actions</th>
-                    </tr>
-                </thead>
-                <tbody className="bg-gray-200 ">
-                    {users.map(user => (
-                        <tr key={user._id}>
-                            <td className="border-y-2 px-4 py-2 border-indigo-600">{user.name}</td>
-                            <td className="border-y-2 px-4 py-2 border-indigo-600">{user.lastname}</td>
-                            <td className="border-y-2 px-4 py-2 border-indigo-600">{user.email}</td>
-                            <td className="border-y-2 px-4 py-2 border-indigo-600">{user.id}</td>
-                            <td className="border-y-2 px-4 py-2 border-indigo-600">
-                                <img className="size-40 transition-transform duration-1000 transform hover:scale-110 max-w-none"
-                                    src={`http://localhost:3000/${user.avatar}`} /></td>
-                            <td className="border-y-2 px-4 py-2 border-indigo-600">
-                                <div className="inline-flex rounded-md shadow-sm" role="group">
-                                    <Link to={`/user/${user._id}`}
-                                        className="px-4 py-2 text-sm font-medium text-orange-600 bg-transparent border
-                                             border-orange-600 rounded-s-lg hover:bg-gray-900 hover:text-white 
-                                             focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white
-                                             dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700">
-                                        Edit
-                                    </Link>
-                                    <button type="button"
-                                        onClick={() => handleDeleteUser(user)}
-                                        className="px-4 py-2 text-sm font-medium text-red-700 bg-transparent border-t border-b border-red-700 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700">
-                                        Delete
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+        <div className="hero flex justify-center py-8 px-10 bg-black min-h-screen">
+
+            <div className='p-8 flex flex-col text-center'>
+                <h2 className='p-4 text-white text-4xl font-bold'>Lista Usuarios</h2>
+                <Table className="bg-black text-white">
+                    {/*  <TableCaption>A list of your recent invoices.</TableCaption> */}
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="w-[100px]">Name</TableHead>
+                            <TableHead>LastName</TableHead>
+                            <TableHead>Email</TableHead>
+                            <TableHead className="text-right">Idetification</TableHead>
+                            <TableHead className="text-right">Avatar</TableHead>
+                            <TableHead className="text-right">Actions</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+
+                        {
+                            users.map(user => (
+                                <TableRow key={user._id}>
+                                    <TableCell className="font-medium">{user.name}</TableCell>
+                                    <TableCell>{user.lastname}</TableCell>
+                                    <TableCell>{user.email}</TableCell>
+                                    <TableCell>{user.id}</TableCell>
+                                    <TableCell>
+                                        {/* <img className="size-20 transition-transform duration-1000 transform hover:scale-110 max-w-none"
+                                        src={`http://localhost:3000/${user.avatar}`} /> */}
+                                        <Avatar>
+                                            <AvatarImage src={`http://localhost:3000/${user.avatar}`} alt="@shadcn" />
+                                            <AvatarFallback>CN</AvatarFallback>
+                                        </Avatar>
+
+                                    </TableCell>
+                                    <TableCell className="text-right">
+
+                                        <Menubar className="bg-transparent w-full border">
+                                            <MenubarMenu>
+                                                <MenubarTrigger className="text-slate-400 w-full text-center focus:bg-red">...</MenubarTrigger>
+                                                <MenubarContent>
+                                                    <MenubarItem>
+                                                        <Link to={`/user/${user._id}`}
+                                                            className="px-4 py-2 text-sm font-medium w-full">
+                                                            Edit
+                                                        </Link>
+                                                    </MenubarItem>
+                                                    <MenubarSeparator />
+                                                    <MenubarItem
+                                                        type="button"
+                                                        className="px-6 py-2 text-sm font-medium w-full"
+                                                        onClick={() => handleDeleteUser(user)}>
+                                                        Delete
+                                                    </MenubarItem>
+                                                </MenubarContent>
+                                            </MenubarMenu>
+                                        </Menubar>
+                                    </TableCell>
+                                </TableRow>
+                            )
+                            )
+                        }
+                    </TableBody>
+                </Table>
+            </div>
         </div>
     );
 }
