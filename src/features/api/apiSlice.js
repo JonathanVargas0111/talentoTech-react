@@ -1,81 +1,47 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
 
-export const apiSlice = createApi({
-    reducerPath: "api",
+
+export const apiHousesSlice = createApi({
+    reducerPath: "housesApi",
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://localhost:3000',
+        baseUrl: 'http://locahost:3000',
         prepareHeaders: (headers, {getState}) => {
-            console.log(getState())
-            console.log(getState().auth.token)
-            // const localData = JSON.parse(localStorage.getItem('sessionData'))
-            //const token = localData.token
             const token = getState().auth.token
             if(token){
                 headers.set('Authorization', `Bearer ${token}`);
             }
             return headers;
         }
-    }), // Hace las veces de Axios
+    }),
     endpoints: (builder) => ({
-        getUsers: builder.query({
-            query: () => '/user',
-            providesTags: ['Users'], // Me permite ejecutar un llamado
-            transformResponse: response => response.sort((a, b) => 
-             (a.name[0].toUpperCase() < b.name[0].toUpperCase()) ? -1 
-            : (a.name[0].toUpperCase() > b.name[0].toUpperCase())  ? 1 : 0)
+        getHouses: builder.query({
+            query: () => '/house',
+            providesTags: ['Houses']
         }),
-        getUserById: builder.query({
-            query: (_id) => '/user/' + _id,
-            providesTags: ['User']
+        getHouseByCode: builder.query({
+            query: (code) => '/house/' + code,
+            providesTags: ['House']
         }),
-        createUser: builder.mutation({
-            query: (newUser) => ({
-                url: '/user',
+        createHouse: builder.mutation({
+            query: (newHouse) => ({
+                url: '/house',
                 method: 'POST',
-                body: newUser
+                body: newHouse
             }),
-            invalidatesTags: ["Users"] // Se ejecuta cuando hay un cambio en la BD
+            invalidatesTags: ["Houses"] // Se ejecuta cuando hay un cambio en la BD
         }),
-        updateUser: builder.mutation({
-            query: (user) => ({
-                url: `/user/${user._id}`,
-                method: 'PATCH',
-                body: user
-            }),
-            invalidatesTags: ["Users", "User"]
-        }),
-        deleteUser: builder.mutation({
-            query: (_id) => ({
-                url: `/user/${_id}`,
+        deleteHouse: builder.mutation({
+            query: (code) => ({
+                url: `/house/${code}`,
                 method: "DELETE",
             }),
-            invalidatesTags: ["Users"]
+            invalidatesTags: ["Houses"]
         }),
-        uploadAvatar: builder.mutation({
-            query: (body) => ({
-                url: `/upload/${body._id}/user`,
-                method: "POST",
-                body: body.file
-            }),
-            invalidatesTags: ["Users"]
-        }),
-        login: builder.mutation({
-            query: (body) => ({
-                url: 'login',
-                method: 'POST',
-                body: body
-            })
-        })        
-    })    
+    })
 })
 
-/** Segun la nomenclatura de la libreria se usa use al principio 
- * y Query o Mutation al final segun corresponda */
-export const { useGetUsersQuery, 
-                useGetUserByIdQuery, 
-                useCreateUserMutation, 
-                useUpdateUserMutation,
-                useDeleteUserMutation,
-                useUploadAvatarMutation,
-                useLoginMutation
-        } = apiSlice
+export const { useGetHousesQuery, 
+    useGetHouseByCodeQuery, 
+    useCreateHouseMutation, 
+    useDeleteHouseMutation,
+} = apiHousesSlice

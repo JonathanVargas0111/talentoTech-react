@@ -6,9 +6,29 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from '../features/authSlice'
 
 
+import {
+    Menubar,
+    MenubarContent,
+    MenubarItem,
+    MenubarMenu,
+    MenubarSeparator,
+    MenubarShortcut,
+    MenubarTrigger,
+} from "@/components/ui/menubar"
+
+
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+} from "@/components/ui/avatar"
+
+
 export default function Header() {
 
     const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
+
+    const user = useSelector(state => state.auth.user)
 
     const isAutheticated = useSelector(state => state.auth.isAutheticated)
     const dispatch = useDispatch()
@@ -16,7 +36,6 @@ export default function Header() {
 
     const handleLogout = () => {
         dispatch(logout())
-
         localStorage.removeItem('sessionData')
         navigate('/login')
     }
@@ -31,6 +50,7 @@ export default function Header() {
     const NAV_LINKS_PRIVATE = [
         { title: 'Inicio', path: '/' },
         { title: 'Usuarios', path: '/user' },
+        {title: 'Create House', path: '//create-house'},
     ]
 
     return (
@@ -84,17 +104,94 @@ export default function Header() {
                                     <Button variant="outline" className="mr-2 bg-black">Login</Button>
                                 </Link>
                             ) : (
+                                <div>
+                                    <Menubar className="bg-transparent w-full border-none">
+                                        <MenubarMenu>
+                                            <MenubarTrigger className="text-slate-400 w-full" >
+                                                <Avatar>
+                                                    <AvatarImage src={`http://localhost:3000/${user.avatar}`} alt="@shadcn" />
+                                                    <AvatarFallback>CN</AvatarFallback>
+                                                </Avatar>
+                                            </MenubarTrigger>
+                                            <MenubarContent>
+                                                <MenubarItem>
+                                                    <MenubarItem disabled className="px-4 py-2 text-lg font-bold w-full text-teal-600">{
+                                                        `${user.name} ${user.lastname}`
+                                                    }</MenubarItem>
+                                                </MenubarItem>
+                                                <MenubarItem>
+                                                    <Link to={`/user/${user._id}`}
+                                                        className="px-4 py-2 text-sm font-medium w-full">
+                                                        Profile
+                                                    </Link>
+                                                </MenubarItem>
+                                                <MenubarSeparator />
+                                                <MenubarItem>
+                                                    <Link to={`/change-password`}
+                                                        className="px-4 py-2 text-sm font-medium w-full">
+                                                       Change password
+                                                    </Link>
+                                                </MenubarItem>
+                                                <MenubarSeparator />                                                
+                                                <MenubarItem >
+                                                    <span onClick={handleLogout} className="px-4 py-2 text-sm font-medium w-full cursor-pointer">
 
-                                <Button
-                                    onClick={handleLogout}
-                                    variant="solid" className="bg-white text-black">Logout</Button>
+                                                        Logout
+                                                    </span>
+                                                    {/* <Button
+                                                    onClick={handleLogout}
+                                                    variant="solid" className="bg-white text-black"></Button> */}
+                                                </MenubarItem>
+                                            </MenubarContent>
+                                        </MenubarMenu>
+                                    </Menubar>
+                                </div>
                             )
                         }
                     </div>
-                    <div className="flex-col justify-end text-white md:flex lg:hidden">
+                    <div className="flex flex-row justify-end text-white md:flex lg:hidden">
                         <button onClick={toggleNavbar} className="">
                             {mobileDrawerOpen ? <X /> : <Menu />}
                         </button>
+                        {
+                            !isAutheticated ? null : (
+                                <Menubar className="bg-transparent w-full border-none">
+                                    <MenubarMenu>
+                                        <MenubarTrigger className="text-slate-400 w-full" >
+                                            <Avatar>
+                                                <AvatarImage src={`http://localhost:3000/${user.avatar}`} alt="@shadcn" />
+                                                <AvatarFallback>CN</AvatarFallback>
+                                            </Avatar>
+                                        </MenubarTrigger>
+                                        <MenubarContent>
+                                            <MenubarItem>
+                                                <MenubarItem disabled className="px-4 py-2 text-sm font-medium w-full">{
+                                                    `${user.name} ${user.lastname}`
+                                                }</MenubarItem>
+                                            </MenubarItem>
+                                            <MenubarItem>
+                                                <Link to={`/user/${user._id}`}
+                                                    className="px-4 py-2 text-sm font-medium w-full">
+                                                    Profile
+                                                </Link>
+                                            </MenubarItem>
+                                            <MenubarSeparator />
+                                            <MenubarItem >
+                                                    <span onClick={handleLogout} className="px-4 py-2 text-sm font-medium w-full cursor-pointer">
+
+                                                        Logout
+                                                    </span>
+                                                    {/* <Button
+                                                    onClick={handleLogout}
+                                                    variant="solid" className="bg-white text-black"></Button> */}
+                                                </MenubarItem>
+                                        </MenubarContent>
+                                    </MenubarMenu>
+                                </Menubar>
+                            )
+                        }
+
+
                     </div>
                 </div>
                 {
@@ -108,6 +205,8 @@ export default function Header() {
                                                 <Link
                                                     className="text-sm text-white hover:text-neutral-500"
                                                     to={item.path}
+                                                    onClick={() => setMobileDrawerOpen(false)}
+
                                                 >
                                                     {item.title}
                                                 </Link>
@@ -115,12 +214,15 @@ export default function Header() {
                                         ))
                                     )
                                 }
+
                                 {
                                     NAV_LINKS.map((item, index) => (
                                         <li key={index} className="py-6">
                                             <Link
                                                 className="text-sm text-white hover:text-neutral-500"
                                                 to={item.path}
+                                                onClick={() => setMobileDrawerOpen(false)}
+
                                             >
                                                 {item.title}
                                             </Link>
@@ -134,12 +236,14 @@ export default function Header() {
                                         <Link to="/login">
                                             <Button variant="outline" className="mr-2 bg-black">Login</Button>
                                         </Link>
-                                    ) : (
+                                    ) : null /* (
+                                        <div>
 
-                                        <Button
-                                            onClick={handleLogout}
-                                            variant="solid" className="bg-white text-black">Logout</Button>
-                                    )
+                                            <Button
+                                                onClick={handleLogout}
+                                                variant="solid" className="bg-white text-black">Logout</Button>
+                                        </div>
+                                    ) */
                                 }
                             </div>
                         </div>

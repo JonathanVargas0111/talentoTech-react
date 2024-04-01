@@ -67,7 +67,7 @@ export default function UserList() {
     else if (isError) return (<div>Error: {error.message} </div>)
 
     return (
-        <div className="hero flex justify-center py-8 px-10 bg-black min-h-screen">
+        <div className="bg-gradient-to-r from-slate-900 to-slate-900 flex justify-center py-8 px-10 bg-black min-h-screen">
 
             <div className='p-8 flex flex-col text-center'>
                 <h2 className='p-4 text-white text-4xl font-bold'>Lista Usuarios</h2>
