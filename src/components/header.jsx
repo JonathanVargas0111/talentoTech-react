@@ -50,7 +50,7 @@ export default function Header() {
     const NAV_LINKS_PRIVATE = [
         { title: 'Inicio', path: '/' },
         { title: 'Usuarios', path: '/user' },
-        {title: 'Create House', path: '//create-house'},
+        {title: 'Create House', path: '/create-house'},
     ]
 
     return (

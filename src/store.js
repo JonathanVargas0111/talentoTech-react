@@ -3,7 +3,8 @@ import numberReducer from './features/numberSlice';
 import usersReducer from './features/userSlice';
 import authReducer from './features/authSlice';
 import { apiSlice } from './features/api/apiSlice';
-import { apiHousesSlice } from './features/api/apiHousesSlice';
+import {apiHousesSlice} from './features/api/apiHousesSlice';
+import {apiColombiaSlice} from './features/api/apiColombiaSlice';
 
 /** Agrupamos los estados en una sola ubicacion */
 
@@ -14,9 +15,13 @@ const store = configureStore({
         auth: authReducer,
         [apiSlice.reducerPath]: apiSlice.reducer,
         [apiHousesSlice.reducerPath]: apiHousesSlice.reducer,
+        [apiColombiaSlice.reducerPath]: apiColombiaSlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(apiSlice.middleware).concat(apiHousesSlice.middleware),
+    getDefaultMiddleware()
+    .concat(apiSlice.middleware)
+    .concat(apiHousesSlice.middleware)
+    .concat(apiColombiaSlice.middleware),
 })
 
 export default store;
