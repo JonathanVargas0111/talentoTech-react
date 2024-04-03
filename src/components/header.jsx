@@ -51,6 +51,7 @@ export default function Header() {
         { title: 'Inicio', path: '/' },
         { title: 'Usuarios', path: '/user' },
         {title: 'Create House', path: '/create-house'},
+        {title: 'Chat', path: '/chat'},
     ]
 
     return (

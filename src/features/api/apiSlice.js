@@ -5,8 +5,8 @@ export const apiSlice = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://localhost:3000',
         prepareHeaders: (headers, {getState}) => {
-            console.log(getState())
-            console.log(getState().auth.token)
+            /* console.log(getState())
+            console.log(getState().auth.token) */
             // const localData = JSON.parse(localStorage.getItem('sessionData'))
             //const token = localData.token
             const token = getState().auth.token
