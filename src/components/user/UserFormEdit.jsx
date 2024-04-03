@@ -11,8 +11,6 @@ export default function UserFormEdit(){
     const [updateUser] = useUpdateUserMutation() //TODO: replace to Update
     const [file, setFile] = useState(null)
     const [uploadAvatar] = useUploadAvatarMutation()
-
-
     const handleChangeAvatar = (e) => {
         setFile(e.target.files)
     }
@@ -57,8 +55,7 @@ export default function UserFormEdit(){
             }   
         } catch (error) {
             console.log(error.message)
-        }
-        
+        }        
     }
 
     /** Se ejecuta al cargar el componente */
@@ -70,30 +67,18 @@ export default function UserFormEdit(){
             </svg>
             <span className="sr-only">Loading...</span>
         </div>;
-        else if(isError) return (<div>Error: {error.message} </div>)
-        
+        else if(isError) return (<div>Error: {error.message} </div>)        
         
     return (
-
-
-
         <div className='hero flex min-h-screen items-center justify-center pt-20'>
             <div className='flex max-w-4xl flex-col items-center justify-center gap-6 pb-10'>
                 <div className='space-y-4'>
                     <h1 className='m-4 text-center text-4xl text-white md:text-2xl lg:text-4xl'>
                     Actualiza tus Datos Personales
-                    </h1>
-                   
+                    </h1>                   
                 </div>
                 <UserForm props={{handleSubmit:handleSubmit,handleChangeAvatar: handleChangeAvatar, user:user}} />
-
             </div>
         </div>
-
-
-
-
-
-
     );
 }

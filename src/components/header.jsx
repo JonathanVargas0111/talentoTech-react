@@ -50,8 +50,9 @@ export default function Header() {
     const NAV_LINKS_PRIVATE = [
         { title: 'Inicio', path: '/' },
         { title: 'Usuarios', path: '/user' },
-        {title: 'Create House', path: '/create-house'},
-        {title: 'Chat', path: '/chat'},
+        { title: 'Create House', path: '/create-house' },
+        { title: "Casas", path: '/house' },
+        { title: 'Chat', path: '/chat' },
     ]
 
     return (
@@ -130,10 +131,10 @@ export default function Header() {
                                                 <MenubarItem>
                                                     <Link to={`/change-password`}
                                                         className="px-4 py-2 text-sm font-medium w-full">
-                                                       Change password
+                                                        Change password
                                                     </Link>
                                                 </MenubarItem>
-                                                <MenubarSeparator />                                                
+                                                <MenubarSeparator />
                                                 <MenubarItem >
                                                     <span onClick={handleLogout} className="px-4 py-2 text-sm font-medium w-full cursor-pointer">
 
@@ -178,14 +179,14 @@ export default function Header() {
                                             </MenubarItem>
                                             <MenubarSeparator />
                                             <MenubarItem >
-                                                    <span onClick={handleLogout} className="px-4 py-2 text-sm font-medium w-full cursor-pointer">
+                                                <span onClick={handleLogout} className="px-4 py-2 text-sm font-medium w-full cursor-pointer">
 
-                                                        Logout
-                                                    </span>
-                                                    {/* <Button
+                                                    Logout
+                                                </span>
+                                                {/* <Button
                                                     onClick={handleLogout}
                                                     variant="solid" className="bg-white text-black"></Button> */}
-                                                </MenubarItem>
+                                            </MenubarItem>
                                         </MenubarContent>
                                     </MenubarMenu>
                                 </Menubar>

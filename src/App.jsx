@@ -15,7 +15,10 @@ import { useDispatch } from "react-redux";
 import { loginSuccess } from './features/authSlice'
 import PrivateRoute from "./components/PrivateRoute";
 
-import HouseFormCreate from "./components/house/HouseFormCreate";
+import HouseFormCreate from "./components/house/HouseFormCreate"; 
+import HouseList from "./components/house/HouseList";
+import HouseFormEdit from "./components/house/HouseFormEdit";
+
 import Chat from "./components/chat/Chat";
 
 
@@ -43,6 +46,9 @@ function App() {
 
           {/* Rutas de casas */}
           <Route path="/create-house" element={<PrivateRoute Component={HouseFormCreate} />} />
+          <Route path="/house" element={<PrivateRoute Component={HouseList} />} />
+          <Route path="/house/:id" element={<PrivateRoute Component={HouseFormEdit} />} />
+
 
           <Route path="/chat" element={<PrivateRoute Component={Chat} />} />
 
