@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { io } from "socket.io-client"
 import { useGetMessagesQuery } from "../../features/api/apiMessageSlice";
 import { useSelector } from "react-redux";
@@ -6,13 +6,47 @@ import cn from 'classnames';
 
 export default function Chat() {
 
-    const { data: messages, isLoading, isError, error } = useGetMessagesQuery();
+    const { data, isLoading, isError, error } = useGetMessagesQuery();
     const user = useSelector((state) => state.auth.user)
+    const [messages, setMessages] = useState([]);
+
+    const socket = io('http://localhost:3000', {
+            transports: ['websocket'],
+        });
+        socket.on('connect', function () {
+            /* console.log('connect'); */
+        })
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(e.target.message.value);
+        const payload = {
+            "body": e.target.message.value,
+            "from": user._id,
+            "to": user._id//!NOTE: Id del destinatario, de deberia de obtenerlo de la base de datos
+        }
+        const data = JSON.stringify(payload);
+        socket.emit('message', data);
+        console.log(data);
+        e.target.reset();
     }
+
+    socket.on("message-receipt", function(data){
+        const newMessage = {
+            "_id": data._id,
+            "body": data.body,
+            "from": {_id:data.from},
+            "to": {_id: data.to},
+            "createdAt": data.createdAt,
+        };
+        setMessages([...messages, newMessage]);
+    })
+
+    useEffect(() => {
+        
+        if (data) {
+            setMessages(data);
+        }
+    }, [data])
 
     if (isLoading) return <div role="status" className='flex justify-center'>
         <svg aria-hidden="true" className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -23,14 +57,7 @@ export default function Chat() {
     </div>;
     else if (isError) return (<div>Error: {error.message} </div>)
 
-    useEffect(() => {
-        const socket = io('http://localhost:3000', {
-            transports: ['websocket'],
-        });
-        socket.on('connect', function () {
-            console.log('connect');
-        })
-    })
+   
 
     return (
         <div className="flex flex-col h-screen py-24 px-2  w-full max-w-5xl mx-auto">
@@ -41,8 +68,8 @@ export default function Chat() {
                 </div>
                 <div className="flex flex-col space-y-2 px-4 py-3 overflow-y-auto h-96">
                     {
-                        messages.map((message) => (
-                            <div key={message.id} className={cn({
+                        messages.map((message, index) => (
+                            <div key={index} className={cn({
                                 'bg-pink-300 self-end': message.from && user._id === message.from._id,
                                 'bg-blue-300 self-start': !(message.from && user._id === message.from._id),
                                 'text-gray-700 py-2 px-4 rounded-lg max-w-xs': true

@@ -49,7 +49,7 @@ export default function Footer() {
                             </ul>
                         </div>
                         <p className="mt-4 text-sm text-center text-gray-400 lg:text-right lg:mt-0">
-                            T&C &nbsp; Career &nbsp; Privacy & Policy &nbsp; Developer  for felipe vargas
+                            T&C &nbsp; Career &nbsp; Privacy & Policy &nbsp; Developer  for <link></link>
                         </p>
                     </div>
                 </div>

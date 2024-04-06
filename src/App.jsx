@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
-import Example from "./components/example";
+import Home from "./components/Home";
 import Footer from "./components/footer";
 import Header from "./components/header";
 import UserList from "./components/user/UserList";
@@ -39,7 +39,7 @@ function App() {
         <Header />
         <Routes>
           {/* Rutas Privadas */}
-          <Route path="/" element={<PrivateRoute Component={Example} />} />
+          <Route path="/" element={<PrivateRoute Component={Home} />} />
           <Route path="/user" element={<PrivateRoute Component={UserList} />} />
           <Route path="/user/:id" element={<PrivateRoute Component={UserFormEdit} />} />
           <Route path="/change-password" element={<PrivateRoute Component={ChangePassword} />} />

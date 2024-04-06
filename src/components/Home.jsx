@@ -1,6 +1,6 @@
 import Card from './house/HouseCard';
 import data from './data.json';
-export default function Example() {
+export default function Home() {
   return (
     <div className="bg-gray-900 text-white">
       {/* Sección 1: Header */}
