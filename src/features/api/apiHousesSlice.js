@@ -4,7 +4,7 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
 export const apiHousesSlice = createApi({
     reducerPath: "housesApi",
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://localhost:3000',
+        baseUrl: import.meta.env.VITE_BACKEND_URL,
         prepareHeaders: (headers, {getState}) => {
             const token = getState().auth.token
             if(token){
