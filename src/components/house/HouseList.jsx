@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import { useDeleteUserMutation, useGetUsersQuery } from '../../features/api/apiSlice';
 import Swal from 'sweetalert2';
+import { useDeleteHouseMutation, useGetHousesQuery } from '../../features/api/apiHousesSlice';
 
 import {
     Menubar,
@@ -27,7 +27,6 @@ import {
     AvatarFallback,
     AvatarImage,
 } from "@/components/ui/avatar"
-import { useGetHousesQuery } from '../../features/api/apiHousesSlice';
 
 
 
@@ -36,10 +35,10 @@ export default function HouseList() {
     /** Obtiene el estado de una variable con Redux */
     // const users = useSelector(state => state.users)
     const { data: houses, isLoading, isError, error } = useGetHousesQuery();
-    const [deleteUser] = useDeleteUserMutation();
-    const handleDeleteHose = (user) => {
+    const [deleteHouse] = useDeleteHouseMutation();
+    const handleDeleteHose = (house) => {
         Swal.fire({
-            title: `Are you sure? user: ${user.name} ${user.lastname}`,
+            title: `Are you sure? house: ${house.code} ${house.address}`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
@@ -47,7 +46,7 @@ export default function HouseList() {
             confirmButtonText: "Yes, delete it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                deleteUser(user._id);
+                deleteHouse(house.code);
                 Swal.fire({
                     title: "Deleted!",
                     text: "Your file has been deleted.",
@@ -65,71 +64,78 @@ export default function HouseList() {
         </svg>
         <span className="sr-only">Loading...</span>
     </div>;
+    else if (!houses) return (<div className='h-screen flex justify-center items-center'>No hay casas registradas {error.message} </div>)
     else if (isError) return (<div>Error: {error.message} </div>)
 
     return (
         <div className="bg-gradient-to-r from-slate-900 to-slate-900 flex justify-center py-8 px-10 bg-black min-h-screen">
 
-            <div className='p-8 flex flex-col text-center'>
+            <div className='p-8 flex flex-col text-center '>
                 <h2 className='p-4 text-white text-4xl font-bold'>Lista Casas</h2>
-                <Table className="bg-black text-white">
-                    {/*  <TableCaption>A list of your recent invoices.</TableCaption> */}
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>state</TableHead>
-                            <TableHead>City</TableHead>
-                            <TableHead className="w-[100px]">Direccion</TableHead>
-                            <TableHead>rooms</TableHead>
-                            <TableHead className="text-right">bathrooms</TableHead>
-                            <TableHead className="text-right">parking</TableHead>
-                            <TableHead className="text-right">price</TableHead>
-                            <TableHead className="text-right">Photos</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
+                <div className='min-h-96 '>
 
-                        {
-                            houses.map(house => (
-                                <TableRow key={house._id}>
-                                    <TableCell>{house.state}</TableCell>
-                                    <TableCell>{house.city}</TableCell>
-                                    <TableCell className="font-medium">{house.address}</TableCell>
-                                    <TableCell>{house.rooms}</TableCell>
-                                    <TableCell>{house.bathrooms}</TableCell>
-                                    <TableCell>{house.parking? "SI":"NO"}</TableCell>
-                                    <TableCell>{house.price}</TableCell>
-                                    <TableCell>                                    
-                                       <img src={`http://localhost:3000/${house.image}`}></img>
-                                    </TableCell>
-                                    <TableCell className="text-right">
+                    <Table className="bg-black text-white">
+                        {/*  <TableCaption>A list of your recent invoices.</TableCaption> */}
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>state</TableHead>
+                                <TableHead>City</TableHead>
+                                <TableHead className="w-[100px]">Direccion</TableHead>
+                                <TableHead>rooms</TableHead>
+                                <TableHead className="text-right">bathrooms</TableHead>
+                                <TableHead className="text-right">parking</TableHead>
+                                <TableHead className="text-right">price</TableHead>
+                                <TableHead className="text-right">Photos</TableHead>
+                                <TableHead className="text-right">Code</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
 
-                                        <Menubar className="bg-transparent w-full border">
-                                            <MenubarMenu>
-                                                <MenubarTrigger className="text-slate-400 w-full text-center focus:bg-red">...</MenubarTrigger>
-                                                <MenubarContent>
-                                                    <MenubarItem>
-                                                        <Link to={`/house/${house._id}`}
-                                                            className="px-4 py-2 text-sm font-medium w-full">
-                                                            Edit
-                                                        </Link>
-                                                    </MenubarItem>
-                                                    <MenubarSeparator />
-                                                    <MenubarItem
-                                                        type="button"
-                                                        className="px-6 py-2 text-sm font-medium w-full"
-                                                        onClick={() => handleDeleteHose(user)}>
-                                                        Delete
-                                                    </MenubarItem>
-                                                </MenubarContent>
-                                            </MenubarMenu>
-                                        </Menubar>
-                                    </TableCell>
-                                </TableRow>
-                            )
-                            )
-                        }
-                    </TableBody>
-                </Table>
+                            {
+                                houses.map(house => (
+                                    <TableRow key={house._id}>
+                                        <TableCell>{house.state}</TableCell>
+                                        <TableCell>{house.city}</TableCell>
+                                        <TableCell className="font-medium">{house.address}</TableCell>
+                                        <TableCell>{house.rooms}</TableCell>
+                                        <TableCell>{house.bathrooms}</TableCell>
+                                        <TableCell>{house.parking ? "SI" : "NO"}</TableCell>
+                                        <TableCell>{house.price}</TableCell>
+                                        <TableCell>
+                                            <img src={`http://localhost:3000/${house.image}`} className='w-full max-w-xs'></img>
+                                        </TableCell>
+                                        <TableCell>{house.code}</TableCell>
+                                        <TableCell className="text-right">
+
+                                            <Menubar className="bg-transparent w-full border">
+                                                <MenubarMenu>
+                                                    <MenubarTrigger className="text-slate-400 w-full text-center focus:bg-red">...</MenubarTrigger>
+                                                    <MenubarContent>
+                                                        <MenubarItem>
+                                                            <Link to={`/house/${house._id}`}
+                                                                className="px-4 py-2 text-sm font-medium w-full">
+                                                                Edit
+                                                            </Link>
+                                                        </MenubarItem>
+                                                        <MenubarSeparator />
+                                                        <MenubarItem
+                                                            type="button"
+                                                            className="px-6 py-2 text-sm font-medium w-full"
+                                                            onClick={() => handleDeleteHose(house)}>
+                                                            Delete
+                                                        </MenubarItem>
+                                                    </MenubarContent>
+                                                </MenubarMenu>
+                                            </Menubar>
+                                        </TableCell>
+                                    </TableRow>
+                                )
+                                )
+                            }
+                        </TableBody>
+                    </Table>
+                </div>
+
             </div>
         </div>
     );

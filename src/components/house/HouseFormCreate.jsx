@@ -1,20 +1,24 @@
 import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import { useState } from 'react';
-import { useCreateHouseMutation } from '../../features/api/apiHousesSlice';
+import { useCreateHouseMutation, useUploadPhotoHouseMutation } from '../../features/api/apiHousesSlice';
 import HouseForm from './HouseForm';
 import { HeroData } from '../../constants/index'
 
 export default function HouseFormCreate(){
 
     const navigate = useNavigate(); // Instanciamos la vaiable de useNavigate
-    const [createHouse] = useCreateHouseMutation()
-
     const [file, setFile] = useState(null);
+    const [createHouse] = useCreateHouseMutation()
+    const [uploadPhotoHouse] = useUploadPhotoHouseMutation()
+
+    const handleChangePhoto = (e) => {
+        setFile(e.target.files)
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();        
-        console.log(e.target.department);
+       /*  console.log(e.target.department); */
         const newHouse = {
             address: e.target.address.value,
             city: e.target.city.value,
@@ -28,7 +32,6 @@ export default function HouseFormCreate(){
             price: parseInt(e.target.price.value),
             code: e.target.code.value,
         }
-        console.log(newHouse);
         try {
             const response = await createHouse(newHouse)          
             if(response.data.status == "error"){
@@ -38,12 +41,13 @@ export default function HouseFormCreate(){
                     title: "La casa no pudo ser registrado, por favor verifique los datos",
                     showConfirmButton: false,
                     timer: 1500
-                  })
+                })
             }else{
                 if(file){
                     const formData = new FormData();
                     formData.append("file", file[0])
-                    // uploadAvatar({_id: response.data._id, file: formData})
+                    
+                    uploadPhotoHouse({code: response.data.code, file: formData})
                 }
                 Swal.fire({
                     position: "top-end",
@@ -52,7 +56,7 @@ export default function HouseFormCreate(){
                     showConfirmButton: false,
                     timer: 1500
                 }).then(() => {
-                    navigate('/user') // Hacemos la redireccion
+                    navigate('/house') // Hacemos la redireccion
                 });
             }
         } catch (error) {
@@ -77,7 +81,7 @@ export default function HouseFormCreate(){
             </div>
 
             <HouseForm props={{handleSubmit: handleSubmit, 
-                        handleChangeAvatar: null, 
+                        handleChangeAvatar: handleChangePhoto, 
                         user:null}} />
          </div>
     </div>
