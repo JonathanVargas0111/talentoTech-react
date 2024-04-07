@@ -112,7 +112,7 @@ export default function HouseList() {
                                                     <MenubarTrigger className="text-slate-400 w-full text-center focus:bg-red">...</MenubarTrigger>
                                                     <MenubarContent>
                                                         <MenubarItem>
-                                                            <Link to={`/house/${house._id}`}
+                                                            <Link to={`/house/${house.code}`}
                                                                 className="px-4 py-2 text-sm font-medium w-full">
                                                                 Edit
                                                             </Link>

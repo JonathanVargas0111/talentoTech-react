@@ -15,10 +15,12 @@ import {
 } from "@/components/ui/select"
 
 import { useGetDepartmentsQuery, useLazyGetCitiesByDepartamentQuery } from "../../features/api/apiColombiaSlice"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export default function HouseForm({ props }) {
+    
     const { handleSubmit, handleChangeAvatar, house } = props
+    
 
     const { data: departments, isLoading, isError, error } = useGetDepartmentsQuery()
 
@@ -26,6 +28,12 @@ export default function HouseForm({ props }) {
     const [getCities] = useLazyGetCitiesByDepartamentQuery()
     const [cities, setCities] = useState([])
     const [parking, setParking] = useState(false)
+    const [defaultValueState, setDefaultValueState] = useState("");
+
+    useEffect(() => {
+        console.log(house);
+        setDefaultValueState(house?.state ? house.state : "")
+    }, []);
 
     const handleChangeDepartment = async (e) => {
         setCities([]) // Limpio la lista de ciudades 
@@ -86,6 +94,7 @@ export default function HouseForm({ props }) {
                             name="department"
                             onValueChange={handleChangeDepartmentShadCN}
                             required
+                                                     
                         >
                             <SelectTrigger className="w-[180px]">
                                 <SelectValue placeholder="Select a department" />
@@ -120,8 +129,7 @@ export default function HouseForm({ props }) {
                         cities.length == 0 ? null : (
                             <div className="mb-4">
                                 <Label className="block text-gray-300 font-bold mb-2" htmlFor="address" >City</Label>
-
-                                <Select name="city" required>
+                                <Select name="city" required >
                                     <SelectTrigger className="w-[180px]">
                                         <SelectValue placeholder="Select a city" />
                                     </SelectTrigger>
@@ -146,7 +154,7 @@ export default function HouseForm({ props }) {
 
                     <div className="mb-4">
                         <Label className="block text-gray-300 font-bold mb-2" htmlFor="type_house" >¿What type is it?</Label>
-                        <Select name="type_house" required >
+                        <Select name="type_house" required defaultValue={house?.type}>
                             <SelectTrigger className="w-[180px]">
                                 <SelectValue placeholder="¿What type is it?" />
                             </SelectTrigger>
@@ -174,12 +182,12 @@ export default function HouseForm({ props }) {
                     </div>
                     <div className="mb-4">
                         <Label className="block text-gray-300 font-bold mb-2" htmlFor="address" >Has parking?</Label>
-                        <Select name="parking" required >
+                        <Select name="parking" required defaultValue={house ? (house.parking ? "true" : "false") : ""}>
                             <SelectTrigger className="w-[180px]">
                                 <SelectValue placeholder="Parking?" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectGroup>
+                                <SelectGroup >
                                     <SelectLabel>Parking</SelectLabel>
                                     <SelectItem value="true">SI</SelectItem>
                                     <SelectItem value="false">NO</SelectItem>

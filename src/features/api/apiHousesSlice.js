@@ -30,6 +30,14 @@ export const apiHousesSlice = createApi({
             }),
             invalidatesTags: ["Houses"] // Se ejecuta cuando hay un cambio en la BD
         }),
+        updateHouse: builder.mutation({
+           query: (house) => ({
+                url: `/house/${house.code}`,
+                method: "PATCH",
+                body: house
+            }),
+            invalidatesTags: ["Houses","House"]
+        }),
         deleteHouse: builder.mutation({
             query: (code) => ({
                 url: `/house/${code}`,
@@ -50,7 +58,8 @@ export const apiHousesSlice = createApi({
 
 export const { useGetHousesQuery, 
     useGetHouseByCodeQuery, 
-    useCreateHouseMutation, 
+    useCreateHouseMutation,
+    useUpdateHouseMutation, 
     useDeleteHouseMutation,
     useUploadPhotoHouseMutation,
 } = apiHousesSlice
